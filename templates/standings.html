@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Session {{ session }} Standings</title>
+  <style>
+    body {
+      background-image: url('/static/session.png');
+      background-size: cover;          /* make it fill the screen */
+      background-repeat: no-repeat;    /* stop repeating */
+      background-attachment: fixed;    /* freeze it while scrolling */
+      background-position: center center;  /* center it */
+      font-family: monospace;
+      color: #fff;
+      margin: 0;
+      padding: 2em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .alliance-box {
+      background-color: #111;
+      padding: 8px;
+      margin-bottom: 1.5em;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+    }
+
+    .alliance-box h2 {
+      text-align: center;
+      margin-bottom: 0.5em;
+    }
+
+    .standing-entry {
+      margin-bottom: 0.2em;
+      white-space: pre-wrap;
+      text-align: center;
+      font-size: 18;
+    }
+
+    a {
+      margin-top: 2em;
+      color: #ccc;
+      text-decoration: none;
+      border: 1px solid #555;
+      padding: 0.3em 0.6em;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Session {{ session }} Standings</h1>
+
+  {% for group in standings %}
+    <div class="alliance-box">
+      <h2>{{ group.group }}</h2>
+      {% for line in group.players %}
+        <p class="standing-entry">{{ line|safe }}</p>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <a href="{{ url_for('play') }}">Next Session</a>
+
+</body>
+</html>

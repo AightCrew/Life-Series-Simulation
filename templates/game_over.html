@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game Over</title>
+  <style>
+    body {
+      background-image: url('/static/end.png');
+      background-size: cover;          /* make it fill the screen */
+      background-repeat: no-repeat;    /* stop repeating */
+      background-attachment: fixed;    /* freeze it while scrolling */
+      background-position: center center;  /* center it */
+      font-family: monospace;
+      color: #fff;
+      margin: 0;
+      padding: 2em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    .player-box {
+      background-color: #111;
+      text-align: center;
+      padding: 10px;
+      margin-bottom: .5em;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .player-box p {
+      margin: 0.3em 0;
+      font-size: 16px;
+    }
+
+    .winner {
+      font-size: 20px;
+      color: #0f0;
+      font-weight: bold;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 2em;
+      color: #ccc;
+      text-decoration: none;
+      border: 1px solid #555;
+      padding: 0.4em 0.8em;
+      border-radius: 4px;
+    }
+
+    a:hover {
+      background-color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Game Over</h1>
+  <p class="winner">🏆 Winner: {{ winner }}</p>
+
+  {% for p in stats %}
+    <div class="player-box">
+      <p><strong>Rank:</strong> {{ p.rank }}</p>
+      <p><strong>Name:</strong> {{ p.name }}</p>
+      <p><strong>Kills:</strong> {{ p.kills }}</p>
+      <p><strong>Deaths:</strong> {{ p.deaths }}</p>
+    </div>
+  {% endfor %}
+
+  <a href="{{ url_for('index') }}">Play Again</a>
+
+</body>
+</html>

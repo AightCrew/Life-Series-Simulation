@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Session Events</title>
+  <style>
+    body {
+      background-image: url('/static/session.png');
+      background-size: cover;          /* make it fill the screen */
+      background-repeat: no-repeat;    /* stop repeating */
+      background-attachment: fixed;    /* freeze it while scrolling */
+      background-position: center center;  /* center it */
+      font-family: monospace;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .content-box {
+      background-color: #111;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 800px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #fff;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 1em;
+      color: #ccc;
+      text-decoration: none;
+      border: 1px solid #555;
+      padding: 0.3em 0.6em;
+      border-radius: 4px;
+    }
+
+    a:hover {
+      background-color: #222;
+    }
+
+    .log-entry {
+      margin-bottom: 0.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="content-box">
+    <h1>Session {{ session }} Events</h1>
+    <div style="white-space: pre-wrap;">
+      {% for line in log %}
+          <p>{{ line|safe }}</p>
+      {% endfor %}
+    </div>
+    <a href="{{ url_for('show_standings', n=session) }}">View Standings</a>
+  </div>
+</body>
+</html>

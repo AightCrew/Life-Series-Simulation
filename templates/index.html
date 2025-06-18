@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Life Game Setup</title>
+    <style>
+        body {
+            background-image: url('/static/winners.png');
+            color: #fff;
+            font-family: monospace;
+            font-size: 16px;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #111;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #000;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        textarea,
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 4px;
+        }
+
+        input[type="radio"] {
+            transform: scale(1.2);
+            margin-right: 5px;
+        }
+
+        input[type="submit"],
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #666;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #444;
+        }
+
+        a button {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Start a New Game</h1>
+
+        <a href="{{ url_for('set_alliance') }}">
+            <button type="button">Set Custom Alliances or Soulmates</button>
+        </a>
+
+        <form id="gameForm" method="POST">
+            <label>Players (comma-separated):</label><br>
+            <textarea name="players" rows="6" cols="60" required>{{ last_players }}</textarea><br>
+
+            <label>Ruleset:</label><br>
+            <select name="ruleset">
+                <option value="tl" {% if last_ruleset == 'tl' %}selected{% endif %}>Third Life</option>
+                <option value="ll" {% if last_ruleset == 'll' %}selected{% endif %}>Last Life</option>
+                <option value="dl" {% if last_ruleset == 'dl' %}selected{% endif %}>Double Life</option>
+                <option value="lil" {% if last_ruleset == 'lil' %}selected{% endif %}>Limited Life</option>
+            </select><br>
+
+            <label>Starting Lives/Time:</label><br>
+            <input type="number" name="lives" min="1" value="{{ last_lives }}"><br>
+
+            <label>Boogeyman Enabled:</label><br>
+            <input type="radio" name="boogey" value="yes" {% if last_boogey == 'yes' %}checked{% endif %}> Yes
+            <input type="radio" name="boogey" value="no" {% if last_boogey == 'no' %}checked{% endif %}> No<br><br>
+
+            <label>Enable Lifesteal:</label><br>
+            <input type="radio" name="lifesteal" value="yes" {% if last_lifesteal == 'yes' %}checked{% endif %}> Yes
+            <input type="radio" name="lifesteal" value="no" {% if last_lifesteal == 'no' %}checked{% endif %}> No<br><br>
+
+            <input type="submit" value="Start Game">
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("gameForm").addEventListener("submit", function (e) {
+            const ruleset = document.querySelector('select[name="ruleset"]').value;
+            const playersText = document.querySelector('textarea[name="players"]').value;
+            const players = playersText.split(',').map(p => p.trim()).filter(p => p !== '');
+
+            if (ruleset === 'dl' && players.length % 2 !== 0) {
+                alert("Double Life requires an even number of players for soulmates.");
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

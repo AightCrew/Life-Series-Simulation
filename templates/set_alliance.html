@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Custom Alliance Setup</title>
+    <style>
+        body {
+            background-image: url('/static/winners.png');
+            color: #fff;
+            font-family: monospace;
+            font-size: 16px;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #111;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #000;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        textarea,
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 4px;
+        }
+
+        input[type="radio"] {
+            transform: scale(1.2);
+            margin-right: 5px;
+        }
+
+        input[type="submit"],
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #666;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #444;
+        }
+
+        .group-block {
+            margin-bottom: 20px;
+        }
+
+        .group-block input {
+            margin-right: 5px;
+            width: calc(50% - 15px);
+            display: inline-block;
+        }
+
+        .group-block button {
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Custom Alliance / Soulmate Setup</h2>
+
+    <form method="POST">
+
+        <label>Ruleset:</label><br>
+        <select name="ruleset">
+            <option value="tl" {% if last_ruleset == 'tl' %}selected{% endif %}>Third Life</option>
+            <option value="ll" {% if last_ruleset == 'll' %}selected{% endif %}>Last Life</option>
+            <option value="dl" {% if last_ruleset == 'dl' %}selected{% endif %}>Double Life</option>
+            <option value="lil" {% if last_ruleset == 'lil' %}selected{% endif %}>Limited Life</option>
+        </select><br>
+
+        <label>Starting Lives/Time:</label><br>
+        <input type="number" name="lives" min="1" value="{{ last_lives }}"><br>
+
+        <label>Boogeyman Enabled:</label><br>
+        <input type="radio" name="boogey" value="yes" {% if last_boogey == 'yes' %}checked{% endif %}> Yes
+        <input type="radio" name="boogey" value="no" {% if last_boogey == 'no' %}checked{% endif %}> No<br><br>
+
+        <label>Enable Lifesteal:</label><br>
+        <input type="radio" name="lifesteal" value="yes" {% if last_lifesteal == 'yes' %}checked{% endif %}> Yes
+        <input type="radio" name="lifesteal" value="no" {% if last_lifesteal == 'no' %}checked{% endif %}> No<br><br>
+
+        <div id="group-container">
+            <label>Add Alliance / Soulmate Group:</label><br>
+            {% for name, members in last_groups %}
+                <div class="group-block">
+                    <input type="text" name="group_name" value="{{ name }}" placeholder="Alliance or Pair Name" required>
+                    <input type="text" name="group_members" value="{{ members }}" placeholder="e.g. a, b" required>
+                    <button type="button" onclick="removeGroup(this)">Remove</button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" onclick="addGroupInput()">+ Add another group</button><br><br>
+
+        <label>Players with No Alliance/Soulmate:</label><br>
+        <textarea name="unallied" rows="4" cols="40">{{ last_unallied }}</textarea><br>
+
+        <input type="submit" value="Start Game">
+    </form>
+</div>
+
+<script>
+function addGroupInput() {
+    const container = document.getElementById("group-container");
+    const block = document.createElement("div");
+    block.classList.add("group-block");
+
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.name = "group_name";
+    nameInput.placeholder = "Alliance or Pair Name";
+    nameInput.required = true;
+
+    const membersInput = document.createElement("input");
+    membersInput.type = "text";
+    membersInput.name = "group_members";
+    membersInput.placeholder = "e.g. c, d";
+    membersInput.required = true;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.textContent = "Remove";
+    removeBtn.onclick = function () {
+        block.remove();
+    };
+
+    block.appendChild(nameInput);
+    block.appendChild(membersInput);
+    block.appendChild(removeBtn);
+    container.appendChild(block);
+}
+
+function removeGroup(button) {
+    const block = button.parentElement;
+    block.remove();
+}
+</script>
+</body>
+</html>
